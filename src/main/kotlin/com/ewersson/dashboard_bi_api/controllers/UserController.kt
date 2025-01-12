@@ -6,6 +6,7 @@ import com.ewersson.dashboard_bi_api.model.users.LoginResponseDTO
 import com.ewersson.dashboard_bi_api.model.users.RegisterDTO
 import com.ewersson.dashboard_bi_api.model.users.User
 import com.ewersson.dashboard_bi_api.repositories.UserRepository
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -30,14 +31,17 @@ constructor(
 ){
 
     @PostMapping("/login")
-    fun login(@RequestBody data: @Valid AuthenticationDTO): ResponseEntity<LoginResponseDTO> {
+    fun login(@RequestBody data: @Valid AuthenticationDTO, response: HttpServletResponse): ResponseEntity<Void> {
         val usernamePassword = UsernamePasswordAuthenticationToken(data.login, data.password)
         val auth = authenticationManager.authenticate(usernamePassword)
 
         val token = tokenService.generateToken(auth.principal as User)
 
-        return ResponseEntity.ok(LoginResponseDTO(token))
+        response.addHeader("Authorization", "Bearer $token")
+
+        return ResponseEntity.ok().build()
     }
+
 
     @PostMapping("/register")
     fun register(@RequestBody data: @Valid RegisterDTO): ResponseEntity<Any> {

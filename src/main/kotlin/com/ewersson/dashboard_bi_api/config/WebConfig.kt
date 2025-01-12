@@ -10,5 +10,6 @@ class WebConfig : WebMvcConfigurer {
         registry.addMapping("/**")
             .allowedOrigins("http://127.0.0.1:5500", "https://bi-app-qvw1.onrender.com")
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .exposedHeaders("Authorization")
     }
 }

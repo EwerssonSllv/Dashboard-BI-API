@@ -36,8 +36,8 @@ class SecurityConfigurations {
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { authorize ->
                 authorize
-                    .requestMatchers(HttpMethod.POST, "/auth/sign").permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/dashboards").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/sales/save").hasRole("USER")
                     .requestMatchers(HttpMethod.GET, "/dashboards/user").hasRole("USER")

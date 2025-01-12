@@ -23,7 +23,7 @@ data class User(
     val role: UserRole? = null,
 
     @Column(name = "login", nullable = false)
-    var login: String,
+    var login: String? = null,
 
     @Column(name = "password", nullable = false)
     private val password: String,
@@ -36,7 +36,7 @@ data class User(
 
 
 
-    fun getUserLogin(): String {
+    fun getUserLogin(): String? {
         return login
     }
 
@@ -55,7 +55,7 @@ data class User(
 
     override fun getPassword(): String = password
 
-    override fun getUsername(): String = login
+    override fun getUsername(): String? = login
 
     override fun isAccountNonExpired(): Boolean = true
 

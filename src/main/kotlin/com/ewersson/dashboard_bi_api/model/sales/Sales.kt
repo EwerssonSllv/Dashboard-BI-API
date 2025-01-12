@@ -6,12 +6,12 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "sales")
-class Sales(
+data class Sales(
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true)
-    var id: Int? = null,
+    private var id: String? = null,
 
     @Column(name = "state")
     var state: String,
@@ -28,11 +28,11 @@ class Sales(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dashboard_id", nullable = false)
     @JsonBackReference
-    var dashboard: Dashboard? = null
+    var dashboard: Dashboard
 
 ) {
 
-    constructor() : this(null, "", 0.0, 0.0, 0.0, null)
+    fun getId(): String? = id
 
     fun calculateAmount() {
         this.amount = sale + average
@@ -40,42 +40,6 @@ class Sales(
 
     override fun toString(): String {
         return "Sales: id: $id, state: '$state', sale: $sale, average: $average, amount: $amount, dashboard: $dashboard)"
-    }
-
-    fun getId(): Int? = id
-
-    fun getState(): String = state
-
-    fun getSale(): Double = sale
-
-    fun getAverage(): Double = average
-
-    fun getAmount(): Double = amount
-
-    fun getDashboard(): Dashboard? = dashboard
-
-    fun setId(id: Int){
-        this.id = id
-    }
-
-    fun setState(newState: String){
-        this.state = newState
-    }
-
-    fun setSale(newSale: Double){
-        this.sale = newSale
-    }
-
-    fun setAverage(newAverage: Double){
-        this.average = newAverage
-    }
-
-    fun setAmount(average: Double, amount: Double){
-        this.amount = sale + average
-    }
-
-    fun setDashboard(dashboard: Dashboard?){
-        this.dashboard = dashboard
     }
 
 }

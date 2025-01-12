@@ -3,7 +3,9 @@ package com.ewersson.dashboard_bi_api.controllers
 import com.ewersson.dashboard_bi_api.model.dashboards.DashboardDTO
 import com.ewersson.dashboard_bi_api.model.users.User
 import com.ewersson.dashboard_bi_api.service.DashboardService
+import com.ewersson.dashboard_bi_api.service.DashboardServiceImpl
 import jakarta.validation.Valid
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/dashboards")
 class DashboardController(
-    private val dashboardService: DashboardService
+
+    @Autowired
+    private val dashboardService: DashboardServiceImpl
 ) {
 
     @PostMapping
@@ -22,6 +26,15 @@ class DashboardController(
     ): ResponseEntity<DashboardDTO> {
         val createdDashboard = dashboardService.createDashboard(dashboardDTO, authenticatedUser)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDashboard)
+    }
+
+    @GetMapping("/user")
+    fun getDashboardsByUser(
+        @AuthenticationPrincipal authenticatedUser: User
+    ): ResponseEntity<List<DashboardDTO>> {
+
+        val dashboards = dashboardService.getDashboardsByUser(authenticatedUser)
+        return ResponseEntity.ok(dashboards)
     }
 
     @GetMapping("/{id}")

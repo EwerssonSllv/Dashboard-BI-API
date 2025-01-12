@@ -32,14 +32,14 @@ class SecurityConfigurations {
                 authorize
                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/dashboards").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/sales/save").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/dashboards").hasRole("USER")
+                    .requestMatchers(HttpMethod.POST, "/sales/save").hasRole("USER")
+                    .requestMatchers(HttpMethod.GET, "/dashboards/user").hasRole("USER")
                     .anyRequest().authenticated()
             }
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
     }
-
     @Bean
     @Throws(Exception::class)
     fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {

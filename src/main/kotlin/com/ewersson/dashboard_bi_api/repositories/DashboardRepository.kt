@@ -9,6 +9,7 @@ import java.util.*
 @Repository
 interface DashboardRepository : JpaRepository<Dashboard, String> {
     fun findByIdAndUser(id: String, user: User): Dashboard?
+    fun findByUserId(userId: String): List<Dashboard>
 }
 
 

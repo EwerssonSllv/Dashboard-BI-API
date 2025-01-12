@@ -7,7 +7,6 @@ import com.ewersson.dashboard_bi_api.repositories.DashboardRepository
 import com.ewersson.dashboard_bi_api.repositories.UserRepository
 
 import org.springframework.stereotype.Service
-import java.util.*
 
 interface DashboardService {
     fun createDashboard(dashboardDTO: DashboardDTO, authenticatedUser: User): DashboardDTO
@@ -32,7 +31,11 @@ class DashboardServiceImpl(
         return DashboardDTO.fromEntity(savedDashboard)
     }
 
+    fun getDashboardsByUser(authenticatedUser: User): List<DashboardDTO> {
+        val dashboards = dashboardRepository.findByUserId(authenticatedUser.id!!)
 
+        return dashboards.map { DashboardDTO.fromEntity(it) }
+    }
 
     override fun getDashboardById(dashboardId: String, authenticatedUser: User): DashboardDTO {
         val dashboard = dashboardRepository.findByIdAndUser(dashboardId, authenticatedUser)

@@ -31,17 +31,15 @@ constructor(
 ){
 
     @PostMapping("/login")
-    fun login(@RequestBody data: @Valid AuthenticationDTO, response: HttpServletResponse): ResponseEntity<Void> {
+    fun login(@RequestBody data: @Valid AuthenticationDTO,  response: HttpServletResponse): ResponseEntity<LoginResponseDTO> {
         val usernamePassword = UsernamePasswordAuthenticationToken(data.login, data.password)
         val auth = authenticationManager.authenticate(usernamePassword)
 
         val token = tokenService.generateToken(auth.principal as User)
-
         response.addHeader("Authorization", "Bearer $token")
 
-        return ResponseEntity.ok().build()
+        return ResponseEntity.ok(LoginResponseDTO(token))
     }
-
 
     @PostMapping("/register")
     fun register(@RequestBody data: @Valid RegisterDTO): ResponseEntity<Any> {

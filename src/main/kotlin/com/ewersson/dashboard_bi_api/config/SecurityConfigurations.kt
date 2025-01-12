@@ -49,12 +49,15 @@ class SecurityConfigurations {
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration = CorsConfiguration().applyPermitDefaultValues()
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = listOf("http://127.0.0.1:5500", "http://localhost:5500", "https://bi-app-qvw1.onrender.com")
         configuration.allowedMethods = listOf("POST", "GET", "PUT", "DELETE")
+        configuration.allowedHeaders = listOf("Content-Type", "Authorization")
         val source: UrlBasedCorsConfigurationSource = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
         return source
     }
+
 
     @Bean
     @Throws(Exception::class)

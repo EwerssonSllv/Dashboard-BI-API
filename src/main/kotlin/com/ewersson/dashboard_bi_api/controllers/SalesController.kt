@@ -1,6 +1,6 @@
 package com.ewersson.dashboard_bi_api.controllers
 
-import com.ewersson.dashboard_bi_api.model.sales.Sales
+
 import com.ewersson.dashboard_bi_api.model.sales.SalesDTO
 import com.ewersson.dashboard_bi_api.model.users.User
 import com.ewersson.dashboard_bi_api.repositories.DashboardRepository
@@ -21,15 +21,14 @@ class SalesController(
     @Autowired
     private val dashboardRepository: DashboardRepository
 
-
 ) {
 
-    @PostMapping
+    @PostMapping("/save")
     fun createSales(
-        @RequestBody @Valid salesDTO: List<SalesDTO>,
+        @RequestBody @Valid salesDTO: SalesDTO,  // Aceita apenas um único item de SalesDTO
         @AuthenticationPrincipal authenticatedUser: User
-    ): ResponseEntity<List<SalesDTO>> {
-        val dashboardId = salesDTO[0].dashboardId
+    ): ResponseEntity<SalesDTO> {  // Retorna um único SalesDTO
+        val dashboardId = salesDTO.dashboardId
         val sales = salesService.createSales(dashboardId, salesDTO, authenticatedUser)
         return ResponseEntity.status(HttpStatus.CREATED).body(sales)
     }
@@ -44,7 +43,6 @@ class SalesController(
             ResponseEntity.status(HttpStatus.NOT_FOUND).build()
         }
     }
-
 
     @DeleteMapping("/{id}")
     fun deleteSale(@PathVariable id: String): ResponseEntity<Void> {

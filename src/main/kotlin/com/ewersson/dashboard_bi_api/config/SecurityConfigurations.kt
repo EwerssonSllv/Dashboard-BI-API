@@ -33,8 +33,7 @@ class SecurityConfigurations {
                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                     .requestMatchers(HttpMethod.POST, "/dashboards").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/sales/{dashboardId}").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/dashboards/{dashboardId}/sales").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/sales/save").permitAll()
                     .anyRequest().authenticated()
             }
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)

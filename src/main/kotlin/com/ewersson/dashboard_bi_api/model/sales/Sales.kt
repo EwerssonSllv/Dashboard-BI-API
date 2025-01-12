@@ -29,14 +29,9 @@ data class Sales(
     @JoinColumn(name = "dashboard_id", nullable = false)
     @JsonBackReference
     var dashboard: Dashboard
-
 ) {
 
     fun getId(): String? = id
-
-    fun calculateAmount() {
-        this.amount = sale + average
-    }
 
     override fun toString(): String {
         return "Sales: id: $id, state: '$state', sale: $sale, average: $average, amount: $amount, dashboard: $dashboard)"

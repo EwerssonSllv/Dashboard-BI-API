@@ -6,6 +6,7 @@ import com.ewersson.dashboard_bi_api.model.sales.SalesDTO
 import com.ewersson.dashboard_bi_api.model.users.User
 import com.ewersson.dashboard_bi_api.repositories.DashboardRepository
 import com.ewersson.dashboard_bi_api.repositories.SalesRepository
+import com.ewersson.dashboard_bi_api.service.exception.ObjectNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.*
@@ -19,22 +20,22 @@ class SalesService(
     private val dashboardRepository: DashboardRepository
 ) {
 
-    fun createSales(dashboardId: String, salesDTO: List<SalesDTO>, authenticatedUser: User): List<SalesDTO> {
-        val dashboard = dashboardRepository.findByIdAndUser(dashboardId, authenticatedUser)
-            ?: throw IllegalArgumentException("Dashboard not found!")
-        val sales = salesDTO.map {
-            Sales(
-                state = it.state,
-                sale = it.sale,
-                average = it.average,
-                amount = it.amount,
-                dashboard = dashboard
-            )
-        }
-        return salesRepository.saveAll(sales).map { SalesDTO.fromEntity(it) }
+    fun createSales(dashboardId: String, salesDTO: SalesDTO, authenticatedUser: User): SalesDTO {
+        val dashboard = dashboardRepository.findById(dashboardId)
+            .orElseThrow { ObjectNotFoundException("Dashboard not found!") }
+
+        val sale = Sales(
+            state = salesDTO.state,
+            sale = salesDTO.sale,
+            average = salesDTO.average,
+            amount = salesDTO.amount,
+            dashboard = dashboard
+        )
+
+        val savedSale = salesRepository.save(sale)
+
+        return SalesDTO.fromEntity(savedSale)
     }
-
-
 
 
     fun getSaleById(id: String): SalesDTO? {

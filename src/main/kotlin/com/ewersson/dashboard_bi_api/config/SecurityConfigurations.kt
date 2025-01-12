@@ -26,6 +26,7 @@ class SecurityConfigurations {
     @Throws(Exception::class)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
+            .cors { }
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { authorize ->
@@ -40,6 +41,8 @@ class SecurityConfigurations {
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)
             .build()
     }
+
+
     @Bean
     @Throws(Exception::class)
     fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {

@@ -3,11 +3,11 @@ package com.ewersson.dashboard_bi_api.model.dashboards
 import com.ewersson.dashboard_bi_api.model.sales.Sales
 
 data class DashboardDTO(
-    val id: String,
+    val id: String? = null,
     val name: String,
     val description: String,
     val sale: List<Sales>?,
-    val userId: String
+    val userId: String? = null
 ) {
     companion object {
         fun fromEntity(dashboard: Dashboard): DashboardDTO {
@@ -16,7 +16,7 @@ data class DashboardDTO(
                 name = dashboard.name,
                 description = dashboard.description,
                 sale = dashboard.sales,
-                userId = dashboard.user.id!!
+                userId = dashboard.user?.id!!
             )
         }
     }

@@ -32,7 +32,6 @@ class DashboardController(
     fun getDashboardsByUser(
         @AuthenticationPrincipal authenticatedUser: User
     ): ResponseEntity<List<DashboardDTO>> {
-
         val dashboards = dashboardService.getDashboardsByUser(authenticatedUser)
         return ResponseEntity.ok(dashboards)
     }

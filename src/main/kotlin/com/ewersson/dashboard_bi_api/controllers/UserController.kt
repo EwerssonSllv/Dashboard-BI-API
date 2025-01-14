@@ -38,7 +38,6 @@ constructor(
         return ResponseEntity.ok(LoginResponseDTO(token))
     }
 
-
     @PostMapping("/register")
     fun register(@RequestBody data: @Valid RegisterDTO): ResponseEntity<Any> {
         if (userRepository.findByLogin(data.login) != null) return ResponseEntity.badRequest().build<Any>()

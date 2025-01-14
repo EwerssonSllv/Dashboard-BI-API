@@ -27,6 +27,6 @@ data class Dashboard(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
-    var user: User
+    var user: User?
 
 )

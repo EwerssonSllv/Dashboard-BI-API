@@ -1,10 +1,7 @@
 package com.ewersson.dashboard_bi_api.controllers
 
 import com.ewersson.dashboard_bi_api.config.TokenService
-import com.ewersson.dashboard_bi_api.model.users.AuthenticationDTO
-import com.ewersson.dashboard_bi_api.model.users.LoginResponseDTO
-import com.ewersson.dashboard_bi_api.model.users.RegisterDTO
-import com.ewersson.dashboard_bi_api.model.users.User
+import com.ewersson.dashboard_bi_api.model.users.*
 import com.ewersson.dashboard_bi_api.repositories.UserRepository
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,13 +37,17 @@ constructor(
 
     @PostMapping("/register")
     fun register(@RequestBody data: @Valid RegisterDTO): ResponseEntity<Any> {
-        if (userRepository.findByLogin(data.login) != null) return ResponseEntity.badRequest().build<Any>()
+        if (userRepository.findByLogin(data.login) != null) {
+            return ResponseEntity.badRequest().build<Any>()
+        }
 
         val encryptedPassword = passwordEncoder.encode(data.password)
-        val newUser = User(null, data.login, encryptedPassword, null)
+        val newUser = User(UserRole.USER, data.login, encryptedPassword, null) // Role fixa como USER
 
         userRepository.save(newUser)
 
         return ResponseEntity.ok().build<Any>()
     }
+
+
 }

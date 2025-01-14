@@ -20,7 +20,7 @@ data class User(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    val role: UserRole? = null,
+    val role: UserRole,
 
     @Column(name = "login", nullable = false)
     var login: String? = null,
@@ -34,13 +34,11 @@ data class User(
 
 ): UserDetails {
 
-
-
     fun getUserLogin(): String? {
         return login
     }
 
-    constructor(role: UserRole?, login: String, password: String, dashboards: MutableList<Dashboard>?) : this(null, role, login, password, null)
+    constructor(role: UserRole, login: String, password: String, dashboards: MutableList<Dashboard>?) : this(null, role, login, password, null)
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
         return if (role == UserRole.ADMIN) {

@@ -43,7 +43,7 @@ constructor(
         if (userRepository.findByLogin(data.login) != null) return ResponseEntity.badRequest().build<Any>()
 
         val encryptedPassword = passwordEncoder.encode(data.password)
-        val newUser = User(data.role, data.login, encryptedPassword, null)
+        val newUser = User(null, data.login, encryptedPassword, null)
 
         userRepository.save(newUser)
 

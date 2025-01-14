@@ -40,7 +40,7 @@ data class User(
         return login
     }
 
-    constructor(role: UserRole, login: String, password: String, dashboards: MutableList<Dashboard>?) : this(null, role, login, password, null)
+    constructor(role: UserRole?, login: String, password: String, dashboards: MutableList<Dashboard>?) : this(null, role, login, password, null)
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
         return if (role == UserRole.ADMIN) {

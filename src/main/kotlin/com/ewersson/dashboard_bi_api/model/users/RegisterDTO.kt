@@ -4,4 +4,4 @@ package com.ewersson.dashboard_bi_api.model.users
 data class RegisterDTO(
     val login: String,
     val password: String,
-    val role: UserRole)
+    val role: UserRole? = null)

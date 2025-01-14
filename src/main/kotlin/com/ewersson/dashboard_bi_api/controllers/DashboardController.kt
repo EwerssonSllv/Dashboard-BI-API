@@ -2,7 +2,6 @@ package com.ewersson.dashboard_bi_api.controllers
 
 import com.ewersson.dashboard_bi_api.model.dashboards.DashboardDTO
 import com.ewersson.dashboard_bi_api.model.users.User
-import com.ewersson.dashboard_bi_api.service.DashboardService
 import com.ewersson.dashboard_bi_api.service.DashboardServiceImpl
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired

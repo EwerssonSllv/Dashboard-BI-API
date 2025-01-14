@@ -3,7 +3,6 @@ package com.ewersson.dashboard_bi_api.model.dashboards
 import com.ewersson.dashboard_bi_api.model.sales.Sales
 import com.ewersson.dashboard_bi_api.model.users.User
 import com.fasterxml.jackson.annotation.JsonBackReference
-import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
 
 @Entity

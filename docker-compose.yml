@@ -6,7 +6,7 @@ services:
     ports:
       - "8082:8082"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://root:naVlqMmhncvapgmqtAsTwdtseErNQJOF@junction.proxy.rlwy.net:42993/railway
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: naVlqMmhncvapgmqtAsTwdtseErNQJOF
+      SPRING_DATASOURCE_URL: jdbc:postgresql://dpg-ctroh0tumphs73ffki10-a.oregon-postgres.render.com:5432/bi_database_g8ft?ssl=true&sslmode=require
+      SPRING_DATASOURCE_USERNAME: bi_database_g8ft_user
+      SPRING_DATASOURCE_PASSWORD: sZOy8LtaaxZFjaKZW2rqaMJAuqvevBVm
     restart: on-failure

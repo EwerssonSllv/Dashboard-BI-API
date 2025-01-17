@@ -24,9 +24,9 @@ class SalesController(
 
     @PostMapping("/save")
     fun createSales(
-        @RequestBody @Valid salesDTO: SalesDTO,  // Aceita apenas um único item de SalesDTO
+        @RequestBody @Valid salesDTO: SalesDTO,
         @AuthenticationPrincipal authenticatedUser: User
-    ): ResponseEntity<SalesDTO> {  // Retorna um único SalesDTO
+    ): ResponseEntity<SalesDTO> {
         val dashboardId = salesDTO.dashboardId
         val sales = salesService.createSales(dashboardId, salesDTO, authenticatedUser)
         return ResponseEntity.status(HttpStatus.CREATED).body(sales)

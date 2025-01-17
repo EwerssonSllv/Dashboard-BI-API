@@ -27,5 +27,4 @@ data class Dashboard(
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     var user: User?
-
 )

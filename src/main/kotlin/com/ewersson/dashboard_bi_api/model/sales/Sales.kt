@@ -1,6 +1,7 @@
 package com.ewersson.dashboard_bi_api.model.sales
 
 import com.ewersson.dashboard_bi_api.model.dashboards.Dashboard
+import com.ewersson.dashboard_bi_api.model.products.Product
 import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 
@@ -11,7 +12,7 @@ data class Sales(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true)
-    private var id: String? = null,
+    var id: String? = null,
 
     @Column(name = "state")
     var state: String,
@@ -25,16 +26,11 @@ data class Sales(
     @Column(name = "amount")
     var amount: Double,
 
+    @OneToMany(mappedBy = "sale", cascade = [CascadeType.ALL], orphanRemoval = true)
+    var products: MutableList<Product>? = mutableListOf(),
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dashboard_id", nullable = false)
     @JsonBackReference
     var dashboard: Dashboard
-) {
-
-    fun getId(): String? = id
-
-    override fun toString(): String {
-        return "Sales: id: $id, state: '$state', sale: $sale, average: $average, amount: $amount, dashboard: $dashboard)"
-    }
-
-}
+)

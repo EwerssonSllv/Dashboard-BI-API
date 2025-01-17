@@ -1,7 +1,6 @@
 package com.ewersson.dashboard_bi_api.model.sales
 
-import com.ewersson.dashboard_bi_api.model.dashboards.Dashboard
-import java.util.UUID
+import com.ewersson.dashboard_bi_api.model.products.Product
 
 data class SalesDTO(
     val id: String? = null,
@@ -9,7 +8,8 @@ data class SalesDTO(
     val sale: Double,
     val average: Double,
     val amount: Double,
-    val dashboardId: String
+    val product: MutableList<Product>?,
+    val dashboardId: String,
 ) {
     companion object {
         fun fromEntity(sale: Sales): SalesDTO {
@@ -18,6 +18,7 @@ data class SalesDTO(
                 sale = sale.sale,
                 average = sale.average,
                 amount = sale.amount,
+                product = sale.products,
                 dashboardId = sale.dashboard.id!!
             )
         }

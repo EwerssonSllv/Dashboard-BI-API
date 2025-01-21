@@ -1,7 +1,6 @@
 package com.ewersson.dashboard_bi_api.service
 
 import com.ewersson.dashboard_bi_api.model.users.User
-import com.ewersson.dashboard_bi_api.repositories.DashboardRepository
 import com.ewersson.dashboard_bi_api.repositories.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
@@ -10,15 +9,11 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
-
 @Service
 class UserService(
 
     @Autowired
-    private val userRepository: UserRepository,
-
-    @Autowired
-    private val dashboardRepository: DashboardRepository
+    private val userRepository: UserRepository
 
 ): UserDetailsService {
     override fun loadUserByUsername(username: String): UserDetails {
@@ -36,7 +31,6 @@ class UserService(
         return authentication.principal as User
     }
 
-
     fun findById(id: String): User {
         return userRepository.findById(id)
             .orElseThrow { IllegalArgumentException("User not found with ID: $id") }
@@ -49,5 +43,4 @@ class UserService(
 
         userRepository.deleteById(id)
     }
-
 }

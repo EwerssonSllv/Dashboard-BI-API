@@ -1,46 +1,57 @@
 package com.ewersson.dashboard_bi_api.service
 
-import com.ewersson.dashboard_bi_api.model.dashboards.Dashboard
+
+import com.ewersson.dashboard_bi_api.model.products.Product
 import com.ewersson.dashboard_bi_api.model.sales.Sales
 import com.ewersson.dashboard_bi_api.model.sales.SalesDTO
 import com.ewersson.dashboard_bi_api.model.users.User
-import com.ewersson.dashboard_bi_api.repositories.DashboardRepository
+import com.ewersson.dashboard_bi_api.repositories.ProductRepository
 import com.ewersson.dashboard_bi_api.repositories.SalesRepository
-import com.ewersson.dashboard_bi_api.service.exception.ObjectNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.util.*
+import java.time.LocalDateTime
 
 @Service
-class SalesService(
+class SalesService
 
     @Autowired
+    constructor(
+
     private val salesRepository: SalesRepository,
-    @Autowired
-    private val dashboardRepository: DashboardRepository
-) {
 
-    fun createSales(dashboardId: String, salesDTO: SalesDTO, authenticatedUser: User): SalesDTO {
-        val dashboard = dashboardRepository.findById(dashboardId)
-            .orElseThrow { ObjectNotFoundException("Dashboard not found!") }
+    private val productRepository: ProductRepository
+    ){
+
+    fun createSale(saleDTO: SalesDTO, authenticatedUser: User, product: Product): Sales {
+        if (product.stock < saleDTO.quantity!!) {
+            throw IllegalStateException("Not enough stock for the product")
+        }
+
+        product.stock -= saleDTO.quantity
 
         val sale = Sales(
-            state = salesDTO.state,
-            sale = salesDTO.sale,
-            average = salesDTO.average,
-            amount = salesDTO.amount,
-            dashboard = dashboard
+            state = authenticatedUser.state,
+            productName = product.name,
+            productPrice = product.price,
+            productImage = product.image,
+            dashboard = null,
+            date = LocalDateTime.now(),
+            quantity = saleDTO.quantity
         )
 
-        val savedSale = salesRepository.save(sale)
-
-        return SalesDTO.fromEntity(savedSale)
+        return salesRepository.save(sale)
     }
 
 
+
+
     fun getSaleById(id: String): SalesDTO? {
-        val sale = salesRepository.findById(id).orElse(null)
-        return sale?.let { SalesDTO.fromEntity(it) }
+        val sale = salesRepository.findById(id)
+        return if (sale.isPresent) {
+            SalesDTO.fromEntity(sale.get())
+        } else {
+            null
+        }
     }
 
     fun deleteSale(id: String): Boolean {
@@ -51,5 +62,5 @@ class SalesService(
             false
         }
     }
-
 }
+

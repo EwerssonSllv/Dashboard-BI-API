@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 class UserController
 @Autowired
 constructor(
@@ -27,38 +27,42 @@ constructor(
     private val userRepository: UserRepository,
     private val tokenService: TokenService,
     private val passwordEncoder: BCryptPasswordEncoder
-){
+) {
 
     @PostMapping("/login")
-    fun login(@RequestBody data: @Valid AuthenticationDTO): ResponseEntity<Any> {
-        try {
+    fun login(@RequestBody @Valid data: AuthenticationDTO): ResponseEntity<Any> {
+        return try {
             val usernamePassword = UsernamePasswordAuthenticationToken(data.login, data.password)
             val auth = authenticationManager.authenticate(usernamePassword)
 
             val token = tokenService.generateToken(auth.principal as User)
-            return ResponseEntity.ok(LoginResponseDTO(token))
-
+            ResponseEntity.ok(LoginResponseDTO(token))
         } catch (e: BadCredentialsException) {
-            return ResponseEntity.badRequest().body(ErrorResponseDTO("Invalid credentials!"))
+            ResponseEntity.badRequest().body(ErrorResponseDTO("Invalid credentials!"))
         } catch (e: UsernameNotFoundException) {
-            return ResponseEntity.badRequest().body(ErrorResponseDTO("User not found!"))
+            ResponseEntity.badRequest().body(ErrorResponseDTO("User not found!"))
         } catch (e: Exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponseDTO("Internal server error!"))
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponseDTO("Internal server error!"))
         }
     }
 
     @PostMapping("/register")
-    fun register(@RequestBody data: @Valid RegisterDTO): ResponseEntity<Any> {
+    fun register(@RequestBody @Valid data: RegisterDTO): ResponseEntity<Any> {
         if (userRepository.findByLogin(data.login) != null) {
-            return ResponseEntity.badRequest().body("User already exists!")
+            return ResponseEntity.badRequest().body(ErrorResponseDTO("User already exists!"))
         }
         val encryptedPassword = passwordEncoder.encode(data.password)
-        val newUser = User(UserRole.USER, data.login, encryptedPassword, null)
+
+        val newUser = User(
+            state = data.state,
+            role = UserRole.USER,
+            login = data.login,
+            password = encryptedPassword,
+            dashboards = null
+        )
 
         userRepository.save(newUser)
-        return ResponseEntity.ok().build<Any>()
+        return ResponseEntity.status(HttpStatus.CREATED).build()
     }
-
-
 
 }

@@ -1,6 +1,7 @@
 package com.ewersson.dashboard_bi_api.model.users
 
 import com.ewersson.dashboard_bi_api.model.dashboards.Dashboard
+import com.ewersson.dashboard_bi_api.model.products.Product
 import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 import lombok.Getter
@@ -18,19 +19,26 @@ data class User(
     @Column(name = "id", unique = true)
     var id: String? = null,
 
+    @Column(name = "state", nullable = false)
+    var state: String,
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     val role: UserRole,
 
     @Column(name = "login", nullable = false)
-    var login: String? = null,
+    var login: String,
 
     @Column(name = "password", nullable = false)
     private val password: String,
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    @JsonBackReference
-    var dashboards: MutableList<Dashboard>? = mutableListOf()
+    @JsonBackReference(value = "user-dashboards")
+    var dashboards: MutableList<Dashboard>? = mutableListOf(),
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JsonBackReference(value = "user-products")
+    var products: MutableList<Product>? = mutableListOf()
 
 ): UserDetails {
 
@@ -38,7 +46,7 @@ data class User(
         return login
     }
 
-    constructor(role: UserRole, login: String, password: String, dashboards: MutableList<Dashboard>?) : this(null, role, login, password, null)
+    constructor(state: String, role: UserRole, login: String, password: String, dashboards: MutableList<Dashboard>?, products: MutableList<Product>?) : this(null, state, role, login, password, null, null)
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
         return if (role == UserRole.ADMIN) {

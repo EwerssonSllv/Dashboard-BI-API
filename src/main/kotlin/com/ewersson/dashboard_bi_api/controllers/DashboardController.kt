@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/dashboards")
 class DashboardController(
-
     @Autowired
     private val dashboardService: DashboardServiceImpl
 ) {
@@ -44,3 +43,4 @@ class DashboardController(
         return ResponseEntity.ok(dashboard)
     }
 }
+

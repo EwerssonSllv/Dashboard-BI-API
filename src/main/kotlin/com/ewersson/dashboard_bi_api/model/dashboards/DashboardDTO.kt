@@ -2,6 +2,7 @@ package com.ewersson.dashboard_bi_api.model.dashboards
 
 import com.ewersson.dashboard_bi_api.model.sales.Sales
 
+@JvmRecord
 data class DashboardDTO(
     val id: String? = null,
     val name: String,

@@ -21,10 +21,11 @@ data class Dashboard(
     var description: String,
 
     @OneToMany(mappedBy = "dashboard", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JsonBackReference(value = "dashboard-sales")
     var sales: MutableList<Sales>? = mutableListOf(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "dashboard-user")
     var user: User?
 )

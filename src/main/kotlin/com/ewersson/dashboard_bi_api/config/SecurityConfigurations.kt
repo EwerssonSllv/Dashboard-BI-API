@@ -39,9 +39,9 @@ class SecurityConfigurations {
                     .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                     .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/dashboards").hasRole("USER")
-                    .requestMatchers(HttpMethod.POST, "/sales/save").hasRole("USER")
+                    .requestMatchers(HttpMethod.POST, "/sales/{productId}").hasRole("USER")
                     .requestMatchers(HttpMethod.GET, "/dashboards/user").hasRole("USER")
-                    .requestMatchers(HttpMethod.POST, "/products/save").hasRole("USER")
+                    .requestMatchers(HttpMethod.POST, "/products").hasRole("USER")
                     .anyRequest().authenticated()
             }
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)
@@ -58,7 +58,6 @@ class SecurityConfigurations {
         source.registerCorsConfiguration("/**", configuration)
         return source
     }
-
 
     @Bean
     @Throws(Exception::class)

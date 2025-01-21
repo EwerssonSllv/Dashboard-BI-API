@@ -1,6 +1,7 @@
 package com.ewersson.dashboard_bi_api.model.products
 
 import com.ewersson.dashboard_bi_api.model.sales.Sales
+import com.ewersson.dashboard_bi_api.model.users.User
 import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 
@@ -8,10 +9,16 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "products")
 data class Product(
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true)
     var id: String? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference(value = "product-user")
+    var user: User? = null,
 
     @Column(name="name", nullable = false)
     var name: String,
@@ -26,7 +33,7 @@ data class Product(
     var stock: Int,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sales_id", nullable = false)
-    @JsonBackReference
-    var sale: Sales
+    @JoinColumn(name = "sale_id", nullable = false)
+    @JsonBackReference(value = "product-sales")
+    var sale: Sales? = null
 )

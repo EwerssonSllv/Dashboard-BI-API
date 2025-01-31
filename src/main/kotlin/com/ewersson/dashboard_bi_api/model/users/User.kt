@@ -2,6 +2,7 @@ package com.ewersson.dashboard_bi_api.model.users
 
 import com.ewersson.dashboard_bi_api.model.dashboards.Dashboard
 import com.ewersson.dashboard_bi_api.model.products.Product
+import com.ewersson.dashboard_bi_api.model.sales.Sales
 import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 import lombok.Getter
@@ -38,7 +39,13 @@ data class User(
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JsonBackReference(value = "user-products")
-    var products: MutableList<Product>? = mutableListOf()
+    var products: MutableList<Product>? = mutableListOf(),
+
+
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JsonBackReference(value = "user-sales")
+    var sales: MutableList<Sales>? = mutableListOf()
+
 
 ): UserDetails {
 

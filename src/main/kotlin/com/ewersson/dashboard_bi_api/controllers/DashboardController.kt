@@ -42,5 +42,17 @@ class DashboardController(
         val dashboard = dashboardService.getDashboardById(id, authenticatedUser)
         return ResponseEntity.ok(dashboard)
     }
+
+    @DeleteMapping("/{id}")
+    fun deleteProduct(
+        @PathVariable id: String,
+        @AuthenticationPrincipal authenticatedUser: User
+    ): ResponseEntity<Void> {
+        return if (dashboardService.deleteDashboard(id)) {
+            ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+        }
+    }
 }
 

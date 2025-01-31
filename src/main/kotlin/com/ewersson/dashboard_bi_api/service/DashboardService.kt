@@ -43,5 +43,17 @@ class DashboardServiceImpl(
         return DashboardDTO.fromEntity(dashboard)
     }
 
+    fun deleteDashboard(id: String): Boolean {
+        return if (dashboardRepository.existsById(id)) {
+            dashboardRepository.deleteById(id)
+            true
+        } else {
+            false
+        }
+    }
+
+
+
+
 }
 

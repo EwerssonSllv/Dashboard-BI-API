@@ -1,7 +1,9 @@
 package com.ewersson.dashboard_bi_api.model.sales
 
 import com.ewersson.dashboard_bi_api.model.dashboards.Dashboard
+import com.ewersson.dashboard_bi_api.model.users.User
 import com.fasterxml.jackson.annotation.JsonBackReference
+import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
@@ -15,6 +17,7 @@ data class Sales(
     @Column(name = "id", unique = true)
     var id: String? = null,
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy - HH:mm")
     @CreationTimestamp
     @Column(name = "date_created", updatable = false, nullable = false)
     var date: LocalDateTime = LocalDateTime.now(),
@@ -36,6 +39,12 @@ data class Sales(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dashboard_id", nullable = false)
-    @JsonBackReference
-    var dashboard: Dashboard? = null
+    @JsonBackReference(value = "sales-dashboard")
+    var dashboard: Dashboard? = null,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference(value = "sales-user")
+    var user: User?
+
 )

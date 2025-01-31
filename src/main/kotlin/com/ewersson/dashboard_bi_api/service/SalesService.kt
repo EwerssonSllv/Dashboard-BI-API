@@ -36,14 +36,16 @@ class SalesService
             productImage = product.image,
             dashboard = null,
             date = LocalDateTime.now(),
-            quantity = saleDTO.quantity
+            quantity = saleDTO.quantity,
+            user = authenticatedUser
         )
 
         return salesRepository.save(sale)
     }
 
-
-
+    fun findAllSales(): List<Sales> {
+        return salesRepository.findAll()
+    }
 
     fun getSaleById(id: String): SalesDTO? {
         val sale = salesRepository.findById(id)

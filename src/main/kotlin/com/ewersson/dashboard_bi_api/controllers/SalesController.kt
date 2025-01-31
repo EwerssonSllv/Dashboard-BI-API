@@ -1,5 +1,6 @@
 package com.ewersson.dashboard_bi_api.controllers
 
+import com.ewersson.dashboard_bi_api.model.sales.Sales
 import com.ewersson.dashboard_bi_api.model.sales.SalesDTO
 import com.ewersson.dashboard_bi_api.model.users.User
 import com.ewersson.dashboard_bi_api.repositories.ProductRepository
@@ -43,6 +44,12 @@ class SalesController(
     fun getSale(@PathVariable id: String): ResponseEntity<SalesDTO> {
         val sale = salesService.getSaleById(id)
         return sale?.let { ResponseEntity.ok(it) } ?: ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+    }
+
+    @GetMapping("/all")
+    fun findAllSales(): ResponseEntity<List<Sales>> {
+        val sales = salesService.findAllSales()
+        return ResponseEntity.ok(sales)
     }
 
     @DeleteMapping("/{id}")

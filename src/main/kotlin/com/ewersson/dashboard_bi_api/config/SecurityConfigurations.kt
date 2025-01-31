@@ -42,6 +42,7 @@ class SecurityConfigurations {
                     .requestMatchers(HttpMethod.POST, "/sales/{productId}").hasRole("USER")
                     .requestMatchers(HttpMethod.GET, "/dashboards/user").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/products").hasRole("USER")
+                    .requestMatchers(HttpMethod.GET, "/sales/all").hasRole("USER")
                     .anyRequest().authenticated()
             }
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)

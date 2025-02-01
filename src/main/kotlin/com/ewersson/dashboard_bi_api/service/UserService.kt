@@ -40,7 +40,6 @@ class UserService(
         if (!userRepository.existsById(id)) {
             throw IllegalArgumentException("User not found with ID: $id")
         }
-
         userRepository.deleteById(id)
     }
 }

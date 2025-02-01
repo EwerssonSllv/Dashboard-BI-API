@@ -1,9 +1,7 @@
 package com.ewersson.dashboard_bi_api.controllers
 
 import com.ewersson.dashboard_bi_api.model.products.ProductDTO
-import com.ewersson.dashboard_bi_api.model.sales.SalesDTO
 import com.ewersson.dashboard_bi_api.model.users.User
-import com.ewersson.dashboard_bi_api.service.ProductService
 import com.ewersson.dashboard_bi_api.service.ProductServiceImpl
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,14 +26,17 @@ class ProductController(
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct)
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{productName}")
     fun getProduct(
-        @PathVariable id: String,
+        @PathVariable productName: String,
         @AuthenticationPrincipal authenticatedUser: User
-    ): ResponseEntity<ProductDTO> {
-        val product = productService.getProductById(id)
-        return product?.let { ResponseEntity.ok(it) } ?: ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+    ): ResponseEntity<List<ProductDTO>> {
+        val products = productService.getProductByName(productName, authenticatedUser)
+        return if (products.isNotEmpty()) ResponseEntity.ok(products)
+        else ResponseEntity.status(HttpStatus.NOT_FOUND).build()
     }
+
+
 
     @DeleteMapping("/{id}")
     fun deleteProduct(

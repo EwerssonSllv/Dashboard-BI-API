@@ -1,10 +1,12 @@
 package com.ewersson.dashboard_bi_api.model.products
 
 import com.ewersson.dashboard_bi_api.model.users.User
+import com.fasterxml.jackson.annotation.JsonIgnore
 
 @JvmRecord
 data class ProductDTO(
     val id: String? = null,
+    @JsonIgnore
     val user: User? = null,
     val name: String,
     val image: String,

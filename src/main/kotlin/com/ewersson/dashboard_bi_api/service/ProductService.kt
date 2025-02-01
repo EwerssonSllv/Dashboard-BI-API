@@ -6,12 +6,14 @@ import com.ewersson.dashboard_bi_api.model.users.User
 import com.ewersson.dashboard_bi_api.repositories.ProductRepository
 import com.ewersson.dashboard_bi_api.repositories.UserRepository
 import com.ewersson.dashboard_bi_api.service.exception.ObjectNotFoundException
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 interface ProductService {
     fun createProduct(productDTO: ProductDTO, authenticatedUser: User): ProductDTO
-    fun getProductById(productId: String, authenticatedUser: User): ProductDTO
+    fun getProductByName(productName: String, authenticatedUser: User): List<ProductDTO>
+
 }
 
 @Service
@@ -23,6 +25,7 @@ class ProductServiceImpl(
     private val userRepository: UserRepository
 
 ): ProductService {
+
 
     override fun createProduct(productDTO: ProductDTO, authenticatedUser: User): ProductDTO {
         val user = userRepository.findById(authenticatedUser.id!!)
@@ -39,15 +42,14 @@ class ProductServiceImpl(
         return ProductDTO.fromEntity(savedProduct)
     }
 
-    override fun getProductById(productId: String, authenticatedUser: User): ProductDTO {
-        val product = productRepository.findByIdAndUser(productId, authenticatedUser)
-            ?: throw IllegalArgumentException("Product not found!")
-        return ProductDTO.fromEntity(product)
+    override fun getProductByName(productName: String, authenticatedUser: User): List<ProductDTO> {
+        val products = productRepository.findByNameContainingIgnoreCaseAndUser(productName, authenticatedUser)
+        return products.sortedBy { it.name.length }
+            .map { ProductDTO.fromEntity(it) }
     }
 
-    fun getProductById(id: String): ProductDTO? {
-        val product = productRepository.findById(id).orElse(null)
-        return product?.let { ProductDTO.fromEntity(it) }
+    fun extractProductName(command: String, keyword: String): String? {
+        return command.replace(keyword, "").trim().ifEmpty { null }
     }
 
     fun deleteProduct(id: String): Boolean {

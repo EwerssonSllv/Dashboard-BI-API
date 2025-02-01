@@ -15,7 +15,7 @@ data class Product(
     @Column(name = "id", unique = true)
     var id: String? = null,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference(value = "product-user")
     var user: User? = null,

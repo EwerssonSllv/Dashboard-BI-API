@@ -34,17 +34,8 @@ class DashboardController(
         return ResponseEntity.ok(dashboards)
     }
 
-    @GetMapping("/{id}")
-    fun getDashboardById(
-        @PathVariable id: String,
-        @AuthenticationPrincipal authenticatedUser: User
-    ): ResponseEntity<DashboardDTO> {
-        val dashboard = dashboardService.getDashboardById(id, authenticatedUser)
-        return ResponseEntity.ok(dashboard)
-    }
-
     @DeleteMapping("/{id}")
-    fun deleteProduct(
+    fun deleteDashboard(
         @PathVariable id: String,
         @AuthenticationPrincipal authenticatedUser: User
     ): ResponseEntity<Void> {
@@ -54,5 +45,6 @@ class DashboardController(
             ResponseEntity.status(HttpStatus.NOT_FOUND).build()
         }
     }
+
 }
 

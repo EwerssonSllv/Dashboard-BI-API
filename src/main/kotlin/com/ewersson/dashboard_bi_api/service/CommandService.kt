@@ -74,7 +74,6 @@ class CommandService(
         return command.replace(keyword, "").trim().ifEmpty { null }
     }
 
-
     fun getSalesForToday(): List<Sales> {
         val today = LocalDate.now()
 
@@ -82,4 +81,5 @@ class CommandService(
             sale.date.toLocalDate() == today
         }
     }
+    
 }

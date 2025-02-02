@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service
 
 interface DashboardService {
     fun createDashboard(dashboardDTO: DashboardDTO, authenticatedUser: User): DashboardDTO
-    fun getDashboardById(dashboardId: String, authenticatedUser: User): DashboardDTO
+    fun getDashboardsByUser(authenticatedUser: User): List<DashboardDTO>
 }
 
 @Service
@@ -31,16 +31,9 @@ class DashboardServiceImpl(
         return DashboardDTO.fromEntity(savedDashboard)
     }
 
-    fun getDashboardsByUser(authenticatedUser: User): List<DashboardDTO> {
-        val dashboards = dashboardRepository.findByUserId(authenticatedUser.id!!)
-
+    override fun getDashboardsByUser(user: User): List<DashboardDTO> {
+        val dashboards = dashboardRepository.findByUserId(user.id!!)
         return dashboards.map { DashboardDTO.fromEntity(it) }
-    }
-
-    override fun getDashboardById(dashboardId: String, authenticatedUser: User): DashboardDTO {
-        val dashboard = dashboardRepository.findByIdAndUser(dashboardId, authenticatedUser)
-            ?: throw IllegalArgumentException("Dashboard not found!")
-        return DashboardDTO.fromEntity(dashboard)
     }
 
     fun deleteDashboard(id: String): Boolean {

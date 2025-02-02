@@ -41,6 +41,11 @@ class SalesService(
         return salesRepository.findByDate(date)
     }
 
+    fun getSalesByUser(user: User): List<SalesDTO> {
+        val sales = salesRepository.findByUserId(user.id!!)
+        return sales.map { SalesDTO.fromEntity(it) }
+    }
+
     fun getSalesByProductName(productName: String, authenticatedUser: User): List<SalesDTO> {
         val sales = salesRepository.findByProductNameContainingIgnoreCase(productName)
         return sales.map { SalesDTO.fromEntity(it) }

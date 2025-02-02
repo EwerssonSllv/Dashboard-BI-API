@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service
 interface ProductService {
     fun createProduct(productDTO: ProductDTO, authenticatedUser: User): ProductDTO
     fun getProductByName(productName: String, authenticatedUser: User): List<ProductDTO>
+    fun getProductsByUser(authenticatedUser: User): List<ProductDTO>
 
 }
 
@@ -25,7 +26,6 @@ class ProductServiceImpl(
     private val userRepository: UserRepository
 
 ): ProductService {
-
 
     override fun createProduct(productDTO: ProductDTO, authenticatedUser: User): ProductDTO {
         val user = userRepository.findById(authenticatedUser.id!!)
@@ -50,6 +50,11 @@ class ProductServiceImpl(
 
     fun extractProductName(command: String, keyword: String): String? {
         return command.replace(keyword, "").trim().ifEmpty { null }
+    }
+
+    override fun getProductsByUser(user: User): List<ProductDTO> {
+        val products = productRepository.findByUserId(user.id!!)
+        return products.map { ProductDTO.fromEntity(it) }
     }
 
     fun deleteProduct(id: String): Boolean {

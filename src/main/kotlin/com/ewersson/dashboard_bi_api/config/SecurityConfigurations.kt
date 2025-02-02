@@ -19,7 +19,6 @@ import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import java.util.*
 
-
 @Configuration
 @EnableWebSecurity
 class SecurityConfigurations {
@@ -45,6 +44,7 @@ class SecurityConfigurations {
                     .requestMatchers(HttpMethod.GET, "/sales/all").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/nlp/query").hasRole("USER")
                     .requestMatchers(HttpMethod.GET, "/products/{productName}").hasRole("USER")
+                    .requestMatchers(HttpMethod.GET, "nlp/user").hasRole("USER")
                     .anyRequest().authenticated()
             }
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter::class.java)
@@ -72,4 +72,5 @@ class SecurityConfigurations {
     fun passwordEncoder(): PasswordEncoder {
         return BCryptPasswordEncoder()
     }
+
 }

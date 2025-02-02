@@ -7,8 +7,9 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface DashboardRepository : JpaRepository<Dashboard, String> {
-    fun findByIdAndUser(id: String, user: User): Dashboard?
+    fun findByIdAndUser(id: String, user: User): List<Dashboard>?
     fun findByUserId(userId: String): List<Dashboard>
+
 }
 
 

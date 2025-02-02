@@ -4,6 +4,7 @@ import com.ewersson.dashboard_bi_api.config.TokenService
 import com.ewersson.dashboard_bi_api.model.users.*
 import com.ewersson.dashboard_bi_api.repositories.UserRepository
 import com.ewersson.dashboard_bi_api.service.exception.ErrorResponseDTO
+import com.ewersson.dashboard_bi_api.model.users.User
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -13,10 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/auth")
@@ -49,7 +47,7 @@ constructor(
     @PostMapping("/register")
     fun register(@RequestBody @Valid data: RegisterDTO): ResponseEntity<Any> {
         if (userRepository.findByLogin(data.login) != null) {
-            return ResponseEntity.badRequest().body(ErrorResponseDTO("User already exists!"))
+            return ResponseEntity.badRequest().body("User already exists!")
         }
         val encryptedPassword = passwordEncoder.encode(data.password)
 
@@ -58,11 +56,13 @@ constructor(
             role = UserRole.USER,
             login = data.login,
             password = encryptedPassword,
-            dashboards = null
+            dashboards = mutableSetOf(),
+            products = mutableSetOf(),
+            sales = mutableSetOf()
         )
 
         userRepository.save(newUser)
-        return ResponseEntity.status(HttpStatus.CREATED).build()
+        return ResponseEntity.ok().build<Any>()
     }
 
 }

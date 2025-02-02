@@ -35,25 +35,42 @@ data class User(
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JsonBackReference(value = "user-dashboards")
-    var dashboards: MutableList<Dashboard>? = mutableListOf(),
+    var dashboards: MutableSet<Dashboard>? = mutableSetOf(),
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JsonBackReference(value = "user-products")
-    var products: MutableList<Product>? = mutableListOf(),
-
+    var products: MutableSet<Product>? = mutableSetOf(),
 
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JsonBackReference(value = "user-sales")
-    var sales: MutableList<Sales>? = mutableListOf()
+    var sales: MutableSet<Sales>? = mutableSetOf()
 
 
 ): UserDetails {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is User) return false
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
 
     fun getUserLogin(): String? {
         return login
     }
 
-    constructor(state: String, role: UserRole, login: String, password: String, dashboards: MutableList<Dashboard>?, products: MutableList<Product>?) : this(null, state, role, login, password, null, null)
+    constructor(
+        state: String,
+        role: UserRole,
+        login: String,
+        password: String,
+        dashboards: MutableSet<Dashboard>?,
+        products: MutableSet<Product>?,
+        sales: MutableSet<Sales>?
+    ) : this(null, state, role, login, password, dashboards, products, sales)
 
     override fun getAuthorities(): Collection<GrantedAuthority> {
         return if (role == UserRole.ADMIN) {

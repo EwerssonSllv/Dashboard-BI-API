@@ -26,14 +26,6 @@ class DashboardController(
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDashboard)
     }
 
-    @GetMapping("/user")
-    fun getDashboardsByUser(
-        @AuthenticationPrincipal authenticatedUser: User
-    ): ResponseEntity<List<DashboardDTO>> {
-        val dashboards = dashboardService.getDashboardsByUser(authenticatedUser)
-        return ResponseEntity.ok(dashboards)
-    }
-
     @DeleteMapping("/{id}")
     fun deleteDashboard(
         @PathVariable id: String,

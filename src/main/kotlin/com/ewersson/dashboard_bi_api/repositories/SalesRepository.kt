@@ -9,12 +9,6 @@ import java.time.LocalDate
 
 @Repository
 interface SalesRepository : JpaRepository<Sales, String> {
-
     fun findByUserId(userId: String): List<Sales>
-
-    fun findByDate(date: LocalDate): List<Sales>
-
-    fun findByProductNameContainingIgnoreCase(productName: String): List<Sales>
-
 }
 

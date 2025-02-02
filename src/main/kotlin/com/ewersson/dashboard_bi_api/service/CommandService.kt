@@ -18,9 +18,11 @@ class CommandService(
         val normalizedCommand = command.lowercase().trim()
 
         return when {
-            normalizedCommand.contains("vendas de hoje") -> ResponseEntity.ok(getSalesForToday())
+            normalizedCommand.contains("vendas de hoje") || normalizedCommand.contains("vendas de hj") -> ResponseEntity.ok(getSalesForToday())
+
             normalizedCommand.contains("estoque do produto") ||
-                    normalizedCommand.contains("preço do produto") -> {
+                    normalizedCommand.contains("preço do produto") ||
+                         normalizedCommand.contains("produto ") -> {
 
                 val productName = extractProductName(normalizedCommand, "estoque do produto") ?:
                 extractProductName(normalizedCommand, "preço do produto") ?:
@@ -40,7 +42,7 @@ class CommandService(
                         }
                         ResponseEntity.ok(productDetails)
                     } else {
-                        ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado: $productName")
+                        ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado tente novamente: $productName")
                     }
                 }
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Nenhum nome de produto identificado.")
@@ -81,5 +83,5 @@ class CommandService(
             sale.date.toLocalDate() == today
         }
     }
-    
+
 }

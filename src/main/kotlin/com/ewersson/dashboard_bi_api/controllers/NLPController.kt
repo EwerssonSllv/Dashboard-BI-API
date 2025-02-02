@@ -17,15 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 
-
 @Controller
 @RequestMapping("nlp")
 class NLPController(
     @Autowired
-    private val commandService: CommandService,
-
-    @Autowired
-    private val userService: UserService
+    private val commandService: CommandService
 ) {
 
     @PostMapping("/query")

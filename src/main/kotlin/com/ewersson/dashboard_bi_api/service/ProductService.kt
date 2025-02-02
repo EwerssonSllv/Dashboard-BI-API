@@ -48,10 +48,6 @@ class ProductServiceImpl(
             .map { ProductDTO.fromEntity(it) }
     }
 
-    fun extractProductName(command: String, keyword: String): String? {
-        return command.replace(keyword, "").trim().ifEmpty { null }
-    }
-
     override fun getProductsByUser(user: User): List<ProductDTO> {
         val products = productRepository.findByUserId(user.id!!)
         return products.map { ProductDTO.fromEntity(it) }

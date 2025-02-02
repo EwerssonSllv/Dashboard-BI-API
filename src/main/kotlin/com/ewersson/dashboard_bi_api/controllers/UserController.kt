@@ -62,7 +62,7 @@ constructor(
         )
 
         userRepository.save(newUser)
-        return ResponseEntity.ok().build<Any>()
+        return ResponseEntity.ok().build()
     }
 
 }

@@ -46,5 +46,4 @@ data class Sales(
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference(value = "sales-user")
     var user: User?
-
 )

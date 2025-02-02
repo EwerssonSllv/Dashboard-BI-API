@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepository : JpaRepository<User, String> {
-
     @EntityGraph(attributePaths = ["sales", "dashboards", "products"])
     fun findByLogin(login: String?): UserDetails?
 }

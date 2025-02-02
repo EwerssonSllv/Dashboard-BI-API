@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service
 
 interface DashboardService {
     fun createDashboard(dashboardDTO: DashboardDTO, authenticatedUser: User): DashboardDTO
-    fun getDashboardsByUser(authenticatedUser: User): List<DashboardDTO>
 }
 
 @Service
@@ -29,11 +28,6 @@ class DashboardServiceImpl(
         )
         val savedDashboard = dashboardRepository.save(dashboard)
         return DashboardDTO.fromEntity(savedDashboard)
-    }
-
-    override fun getDashboardsByUser(user: User): List<DashboardDTO> {
-        val dashboards = dashboardRepository.findByUserId(user.id!!)
-        return dashboards.map { DashboardDTO.fromEntity(it) }
     }
 
     fun deleteDashboard(id: String): Boolean {

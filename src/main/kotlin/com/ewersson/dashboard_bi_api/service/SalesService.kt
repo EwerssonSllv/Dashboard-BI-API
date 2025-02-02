@@ -12,8 +12,7 @@ import java.time.LocalDateTime
 
 @Service
 class SalesService(
-    private val salesRepository: SalesRepository,
-    private val productRepository: ProductRepository
+    private val salesRepository: SalesRepository
 ) {
 
     fun createSale(saleDTO: SalesDTO, authenticatedUser: User, product: Product): Sales {
@@ -37,31 +36,9 @@ class SalesService(
         return salesRepository.save(sale)
     }
 
-    fun findSalesByDate(date: LocalDate): List<Sales> {
-        return salesRepository.findByDate(date)
-    }
-
-    fun getSalesByUser(user: User): List<SalesDTO> {
-        val sales = salesRepository.findByUserId(user.id!!)
-        return sales.map { SalesDTO.fromEntity(it) }
-    }
-
-    fun getSalesByProductName(productName: String, authenticatedUser: User): List<SalesDTO> {
-        val sales = salesRepository.findByProductNameContainingIgnoreCase(productName)
-        return sales.map { SalesDTO.fromEntity(it) }
-    }
 
     fun findAllSales(): List<Sales> {
         return salesRepository.findAll()
-    }
-
-    fun getSaleById(id: String): SalesDTO? {
-        val sale = salesRepository.findById(id)
-        return if (sale.isPresent) {
-            SalesDTO.fromEntity(sale.get())
-        } else {
-            null
-        }
     }
 
     fun deleteSale(id: String): Boolean {

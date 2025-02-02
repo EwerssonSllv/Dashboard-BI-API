@@ -36,8 +36,6 @@ class ProductController(
         else ResponseEntity.status(HttpStatus.NOT_FOUND).build()
     }
 
-
-
     @DeleteMapping("/{id}")
     fun deleteProduct(
         @PathVariable id: String,

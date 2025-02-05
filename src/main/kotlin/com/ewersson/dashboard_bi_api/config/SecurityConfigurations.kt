@@ -41,6 +41,8 @@ class SecurityConfigurations {
                     .requestMatchers(HttpMethod.POST, "/sales/{productId}").hasRole("USER")
                     .requestMatchers(HttpMethod.GET, "/dashboards/user").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/products").hasRole("USER")
+                    .requestMatchers(HttpMethod.GET, "/products/all").hasRole("USER")
+                    .requestMatchers(HttpMethod.GET, "/products/{productID}").hasRole("USER")
                     .requestMatchers(HttpMethod.GET, "/sales/all").hasRole("USER")
                     .requestMatchers(HttpMethod.POST, "/nlp/query").hasRole("USER")
                     .requestMatchers(HttpMethod.GET, "/products/{productName}").hasRole("USER")

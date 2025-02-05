@@ -42,6 +42,16 @@ class ProductServiceImpl(
         return ProductDTO.fromEntity(savedProduct)
     }
 
+    fun findAllProducts(): List<ProductDTO> {
+        val products = productRepository.findAll()
+        return products.map { ProductDTO.fromEntity(it) }
+    }
+
+    fun findAllProductsByUser(user: User): List<ProductDTO> {
+        val products = productRepository.findByUserId(user.id!!)
+        return products.map { ProductDTO.fromEntity(it) }
+    }
+
     override fun getProductByName(productName: String, authenticatedUser: User): List<ProductDTO> {
         val products = productRepository.findByNameContainingIgnoreCaseAndUser(productName, authenticatedUser)
         return products.sortedBy { it.name.length }

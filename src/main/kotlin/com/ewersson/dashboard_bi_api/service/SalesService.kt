@@ -4,10 +4,8 @@ import com.ewersson.dashboard_bi_api.model.products.Product
 import com.ewersson.dashboard_bi_api.model.sales.Sales
 import com.ewersson.dashboard_bi_api.model.sales.SalesDTO
 import com.ewersson.dashboard_bi_api.model.users.User
-import com.ewersson.dashboard_bi_api.repositories.ProductRepository
 import com.ewersson.dashboard_bi_api.repositories.SalesRepository
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Service

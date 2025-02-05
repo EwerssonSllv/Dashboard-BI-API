@@ -36,6 +36,30 @@ class ProductController(
         else ResponseEntity.status(HttpStatus.NOT_FOUND).build()
     }
 
+    @GetMapping("/all")
+    fun getAllProducts(
+        @AuthenticationPrincipal authenticatedUser: User
+    ): ResponseEntity<List<ProductDTO>> {
+        return try {
+            val products = productService.findAllProducts()
+            ResponseEntity.ok(products)
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+        }
+    }
+
+    @GetMapping("/user")
+    fun getProductsByUser(
+        @AuthenticationPrincipal authenticatedUser: User
+    ): ResponseEntity<List<ProductDTO>> {
+        return try {
+            val products = productService.findAllProductsByUser(authenticatedUser) // Busca produtos do usuário autenticado
+            ResponseEntity.ok(products)
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+        }
+    }
+
     @DeleteMapping("/{id}")
     fun deleteProduct(
         @PathVariable id: String,

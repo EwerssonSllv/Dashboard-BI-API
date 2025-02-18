@@ -4,6 +4,7 @@ import com.ewersson.dashboard_bi_api.model.dashboards.Dashboard
 import com.ewersson.dashboard_bi_api.model.users.User
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
@@ -45,5 +46,6 @@ data class Sales(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference(value = "sales-user")
+    @JsonIgnore
     var user: User?
 )

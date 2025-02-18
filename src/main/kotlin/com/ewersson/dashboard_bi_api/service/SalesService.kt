@@ -34,6 +34,11 @@ class SalesService(
         return salesRepository.save(sale)
     }
 
+    fun getSalesByUser(authenticatedUser: User): List<SalesDTO> {
+        val sales = salesRepository.findByUserId(authenticatedUser.id!!)
+        return sales.map { SalesDTO.fromEntity(it) }
+    }
+
 
     fun findAllSales(): List<Sales> {
         return salesRepository.findAll()

@@ -1,8 +1,10 @@
 package com.ewersson.dashboard_bi_api.service
 
 import com.ewersson.dashboard_bi_api.model.products.ProductDTO
-import com.ewersson.dashboard_bi_api.model.sales.Sales
+import com.ewersson.dashboard_bi_api.model.sales.SalesByStateDTO
 import com.ewersson.dashboard_bi_api.model.users.User
+import com.ewersson.dashboard_bi_api.repositories.ProductRepository
+import com.ewersson.dashboard_bi_api.repositories.SalesRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -10,15 +12,18 @@ import java.time.LocalDate
 
 @Service
 class CommandService(
-    private val salesService: SalesService,
-    private val productService: ProductService
+    private val productService: ProductService,
+
+    private val salesRepository: SalesRepository,
+
+    private val productRepository: ProductRepository
 ) {
 
     fun processCommand(command: String, authenticatedUser: User): ResponseEntity<Any> {
         val normalizedCommand = command.lowercase().trim()
 
         return when {
-            normalizedCommand.contains("vendas de hoje") || normalizedCommand.contains("vendas de hj") -> ResponseEntity.ok(getSalesForToday())
+            normalizedCommand.contains("vendas de hoje") || normalizedCommand.contains("vendas de hj") -> ResponseEntity.ok(getSalesToday(authenticatedUser))
 
             normalizedCommand.contains("estoque do produto") ||
                     normalizedCommand.contains("preço do produto") ||
@@ -76,12 +81,27 @@ class CommandService(
         return command.replace(keyword, "").trim().ifEmpty { null }
     }
 
-    fun getSalesForToday(): List<Sales> {
-        val today = LocalDate.now()
 
-        return salesService.findAllSales().filter { sale ->
-            sale.date.toLocalDate() == today
+    fun getSalesToday(owner: User): List<SalesByStateDTO> {
+        val today = LocalDate.now()
+        val userProducts = productRepository.findByUserId(owner.id!!)
+
+        val salesToday = salesRepository.findAll().filter { sale ->
+            sale.date.toLocalDate() == today && sale.productName in userProducts.map { it.name }
+        }
+        return salesToday.groupBy { it.state }.map { (state, sales) ->
+            SalesByStateDTO(
+                state = state,
+                totalQuantity = sales.sumOf { it.quantity ?: 0 },
+                totalValue = sales.sumOf { (it.productPrice ?: 0.0) * (it.quantity ?: 0) },
+                averagePrice = if (sales.isNotEmpty()) sales.mapNotNull { it.productPrice }.average() else 0.0
+            )
         }
     }
+
+
+
+
+
 
 }
